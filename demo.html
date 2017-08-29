@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+     <meta name="viewport" content="width=640,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+		<title></title>
+		<script>
+			var iScale = 1;
+			iScale = iScale / window.devicePixelRatio;
+			//console.log(window.devicePixelRatio)
+			//document.write('<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=' + iScale + ',minimum-scale=' + iScale + ',maximum-scale=' + iScale + '">')
+		</script>
+		<style>
+		
+			body{
+				margin: 0;
+			}
+			div{
+				width: 200px;
+				height: 200px;
+				background-color: red;
+				color: #000;
+				border:1px solid red;
+				position:absolute;
+			}
+		</style>
+	</head>
+	<body >
+		<div class="box"></div>
+	</body>
+    <script src="zepto.min.js"></script>
+    <script>
+	//draggerPc('.box');
+	draggerWap('.box');
+
+	
+/////////////////////////////////Wap		
+ function draggerWap(obj){
+	var disX=0;
+	var disY=0;
+	$(obj).on('touchstart', function (ev){
+		var This=$(this)
+		var touch = ev.targetTouches[0];
+		disX=touch.pageX-$(this).position().left; //有定位父级（祖先节点）的距离值，若无定位父级，则为整个页面的距离(不认margin值)
+		disY=touch.pageY-$(this).position().top;
+		//console.log(disX,disY)
+		$(document).on('touchmove',function (ev){
+		 var touch = ev.targetTouches[0];  
+		 var L=touch.pageX-disX;
+		 var T=touch.pageY-disY;
+		    $(obj).css('left',L);
+			$(obj).css('top',T);
+		})
+		$(document).on('touchend', function (){
+			$(document).off();
+		})
+		return false;	
+	})
+  }
+  
+//////////////////////////////////////PC端
+ function draggerPc(obj){
+	//鼠标距离元素的横纵向距离
+	var disX=0;
+	var disY=0;
+	$(obj).on('mousedown', function (ev){
+		var This=$(this)
+		//var touch = ev.originalEvent.changedTouches[0];
+		disX=ev.pageX-$(this).offset().left; //不论结构上有无嵌套，或嵌套父级有无定位，跟可视区无关，到整个页面的距离
+		disY=ev.pageY-$(this).offset().top;
+		//console.log(disX,disY)
+		$(document).on('mousemove',function (ev){
+		// var touch = ev.originalEvent.changedTouches[0];  
+		 var L=ev.pageX-disX;
+		 var T=ev.pageY-disY;
+		    $(obj).css('left',L);
+			$(obj).css('top',T);
+		})
+		$(document).on('mouseup', function (){
+			$(document).off();
+		})
+		//阻止默认事件
+		return false;	
+	})
+ } 
+   
+//////////////////////////////面向对象拖拽PC
+/*1、先变形：
+尽量不要出现函数嵌套函数，可以有全局变量
+2、把不是赋值的语句放到单独函数中*/
+// 	function DraggerPc(id){
+// 		this.oDiv=$(id);
+// 		this.disX=0;
+// 		this.disY=0;
+// 	}
+// 	DraggerPc.prototype.init=function (){
+// 		var This=this;
+// 		this.oDiv.mousedown(function (ev){
+// 			This.fnDown(ev);
+// 			return false;
+// 	    });
+// 	}
+// 	DraggerPc.prototype.fnDown=function (ev){
+// 		var This=this;
+// 		this.disX=ev.pageX-this.oDiv.offset().left;
+// 		this.disY=ev.pageY-this.oDiv.offset().top;
+// 		$(document).mousemove(
+// 			 function (ev){
+// 				This.fnMove(ev);
+// 			 }
+// 	    );
+// 	   $(document).mouseup(This.fnUp)
+// 	}
+// 	DraggerPc.prototype.fnMove=function (ev){
+// 		this.oDiv.css('left',ev.pageX-this.disX);
+// 		this.oDiv.css('top',ev.pageY-this.disY)
+// 	}
+// 	DraggerPc.prototype.fnUp=function (){
+// 		$(document).off();
+// 	}
+// 	//var d1=new DraggerPc('.box');
+// 	//d1.init();
+	
+// ///////////////面向对象拖拽WAP
+// 	function DraggerWap(id){
+// 		this.oDiv=$(id);
+// 		this.disX=0;
+// 		this.disY=0;
+// 	}
+// 	DraggerWap.prototype.init=function (){
+// 		var This=this;
+// 		this.oDiv.on('touchstart',function (ev){
+// 			This.fnDown(ev);
+// 			return false;
+// 	    });
+// 	}
+// 	DraggerWap.prototype.fnDown=function (ev){
+// 		var touch = ev.originalEvent.changedTouches[0];
+// 		var This=this;
+// 		this.disX=touch.pageX-this.oDiv.offset().left;
+// 		this.disY=touch.pageY-this.oDiv.offset().top;
+// 		$(document).on('touchmove',function (ev) {
+// 		   This.fnMove(ev);	
+// 		});
+// 		$(document).on('touchend', function (){
+// 		   This.fnUp	
+// 		})
+// 	}
+// 	DraggerWap.prototype.fnMove=function (ev){
+// 		var touch = ev.originalEvent.changedTouches[0];
+// 		this.oDiv.css('left',touch.pageX-this.disX);
+// 		this.oDiv.css('top',touch.pageY-this.disY)
+// 	}
+// 	DraggerWap.prototype.fnUp=function (){
+// 		$(document).off();
+// 	}
+// 	var d1=new DraggerWap('.box');
+	//d1.init();
+    </script>
+</html>
